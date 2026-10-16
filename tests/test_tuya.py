@@ -1670,7 +1670,10 @@ async def test_sm0202_motion_sensor_signature(assert_signature_matches_quirk):
 
 @pytest.mark.parametrize(
     "quirk",
-    (zhaquirks.tuya.ts0041.TuyaSmartRemote0041TOPlusA,),
+    (
+        zhaquirks.tuya.ts0041.TuyaSmartRemote0041TOPlusA,
+        zhaquirks.tuya.ts0041.TuyaSmartRemote0041TOPlusB,
+    ),
 )
 async def test_power_config_no_bind(zigpy_device_from_quirk, quirk):
     """Test that the power configuration cluster is not bound and no attribute reporting is set up."""
@@ -2224,3 +2227,52 @@ async def test_ts1201_learn_state_is_per_instance(zigpy_device_from_quirk):
     assert transmit1.msg_length == 4
     assert transmit2.ir_msg == []
     assert transmit2.msg_length == 0
+
+
+async def test_ts0041_six_endpoint_signature(assert_signature_matches_quirk):
+    """Test six-endpoint TS0041 remote signature is matched to its quirk."""
+    signature = {
+        "endpoints": {
+            "1": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0000", "0x0001", "0x0006", "0xe000"],
+                "out_clusters": ["0x000a", "0x0019"],
+            },
+            "2": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0001", "0x0006"],
+                "out_clusters": [],
+            },
+            "3": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0001", "0x0006"],
+                "out_clusters": [],
+            },
+            "4": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0001", "0x0006"],
+                "out_clusters": [],
+            },
+            "5": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0001", "0x0006"],
+                "out_clusters": [],
+            },
+            "6": {
+                "profile_id": 260,
+                "device_type": "0x0000",
+                "in_clusters": ["0x0001", "0x0006"],
+                "out_clusters": [],
+            },
+        },
+        "manufacturer": "_TZ3000_fa9mlvja",
+        "model": "TS0041",
+    }
+    assert_signature_matches_quirk(
+        zhaquirks.tuya.ts0041.TuyaSmartRemote0041TOPlusB, signature
+    )
